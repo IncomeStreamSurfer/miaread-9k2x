@@ -1,0 +1,78 @@
+---
+import Layout from '../layouts/Layout.astro';
+import LinkButton from '../components/LinkButton.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+import { LINKS } from '../lib/links';
+---
+<Layout>
+  <main class="relative min-h-screen overflow-hidden">
+    <div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10">
+      <div class="absolute -top-24 -left-16 w-80 h-80 rounded-full bg-pink-soft/50 blur-3xl"></div>
+      <div class="absolute top-1/3 -right-20 w-96 h-96 rounded-full bg-pink/30 blur-3xl"></div>
+      <div class="absolute bottom-0 left-1/4 w-72 h-72 rounded-full bg-cream-deep/70 blur-3xl"></div>
+    </div>
+
+    <div class="max-w-md mx-auto px-5 pt-14 pb-20 sm:pt-20">
+      <section class="text-center mb-10">
+        <div class="inline-block relative mb-5">
+          <div class="w-28 h-28 rounded-full bg-gradient-to-br from-pink-soft via-pink to-pink-deep p-1 shadow-lg">
+            <div class="w-full h-full rounded-full bg-cream flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 100 100" class="w-20 h-20 text-pink-deep" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 30v45l20-8 15 8 15-8 20 8V30L65 22l-15 8-15-8z" fill="#f3e7d1"/>
+                <path d="M50 30v45"/>
+                <path d="M25 38h15M25 46h15M25 54h12"/>
+                <path d="M60 38h15M60 46h15M60 54h12"/>
+              </svg>
+            </div>
+          </div>
+          <span class="absolute -bottom-1 -right-1 bg-cream rounded-full px-2 py-1 shadow-md text-xs font-display italic text-pink-deep border border-pink/20">📚</span>
+        </div>
+        <h1 class="font-display text-4xl sm:text-5xl font-semibold text-ink tracking-tight">@miaread</h1>
+        <p class="mt-2 text-ink/70 text-[15px] leading-relaxed max-w-xs mx-auto">
+          Literary fiction, quiet mornings, and book-shaped feelings.<br/>
+          <span class="italic text-pink-deep">Currently reading: <em>Piranesi</em></span>
+        </p>
+        <div class="mt-3 inline-flex items-center gap-2 text-xs text-ink/50">
+          <span class="w-1.5 h-1.5 rounded-full bg-pink-deep animate-pulse"></span>
+          2025 goal: 52 / 38 books
+        </div>
+      </section>
+
+      <section class="space-y-3">
+        {LINKS.map((link) => <LinkButton link={link} />)}
+      </section>
+
+      <section id="newsletter" class="mt-10 p-6 rounded-2xl bg-white/70 backdrop-blur border border-pink/30 shadow-sm">
+        <h2 class="font-display text-2xl text-ink mb-1">Bookish letters ✉</h2>
+        <p class="text-sm text-ink/70 mb-4">Every other Sunday. Current read, 3 can't-stop-thinking-about-it books, one cozy rec.</p>
+        <NewsletterForm />
+      </section>
+
+      <section id="bookclub" class="mt-6 p-6 rounded-2xl bg-gradient-to-br from-pink-soft/40 to-cream-deep/60 border border-pink/30">
+        <h2 class="font-display text-2xl text-ink mb-1">The Cozy Read Club</h2>
+        <p class="text-sm text-ink/70 mb-3">One book a month. Live voice chat on the last Sunday. Tea strongly encouraged.</p>
+        <p class="text-xs text-ink/60"><strong class="text-pink-deep">This month:</strong> <em>Tomorrow, and Tomorrow, and Tomorrow</em> — Gabrielle Zevin</p>
+        <a href="mailto:hello@miaread.com?subject=Book%20Club" class="inline-block mt-3 text-sm font-medium text-pink-deep hover:text-ink transition-colors">
+          email me to join →
+        </a>
+      </section>
+
+      <footer class="text-center mt-12 text-xs text-ink/40 font-display italic">
+        made with tea & paperbacks
+      </footer>
+    </div>
+
+    <script>
+      document.querySelectorAll<HTMLAnchorElement>('.link-btn').forEach((a) => {
+        a.addEventListener('click', () => {
+          const key = a.dataset.linkKey;
+          if (!key) return;
+          navigator.sendBeacon?.(
+            '/api/click',
+            new Blob([JSON.stringify({ key })], { type: 'application/json' })
+          );
+        });
+      });
+    </script>
+  </main>
+</Layout>
